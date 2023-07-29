@@ -7,3 +7,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: test123
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true

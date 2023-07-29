@@ -1,4 +1,4 @@
-package com.bharat.AnimeAPI.security;
+package com.bharat.AnimeAPI.security.models;
 
 
 import lombok.AllArgsConstructor;
