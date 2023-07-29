@@ -34,6 +34,7 @@ public class AnimeUserService {
             .ifPresent(
                 saveUser -> saveUser.getAnimeIds().forEach(animeId -> {
                     List<String> animeIds = animeUser.getAnimeIds();
+
                     if(!animeIds.contains(animeId)){
                         animeIds.add(0, animeId);
                     }
@@ -53,14 +54,7 @@ public class AnimeUserService {
 
         return AnimeUserResponse.builder()
                 .email(animeUser.getEmail())
-                .animes(
-                        animeUser.getAnimeIds().stream().map(
-                                animeId -> {
-                                    return animeInfoService.getDetails(animeId);
-                                }
-                        )
-                                .toList()
-                )
+                .animes(animeUser.getAnimeIds().stream().map(animeInfoService::getDetails).toList())
                 .build();
     }
 
