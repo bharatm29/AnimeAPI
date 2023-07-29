@@ -1,4 +1,4 @@
-package com.bharat.AnimeAPI.animeInfoService.models;
+package com.bharat.AnimeAPI.userAnimeData.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Anime {
-    private String animeId, animeTitle, animeUrl, animeImg, status;
+public class AnimeResponse {
+    private String message;
 }

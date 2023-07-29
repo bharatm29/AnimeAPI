@@ -1,13 +1,13 @@
-package com.bharat.AnimeAPI.animeInfoService.controllers;
+package com.bharat.AnimeAPI.animeInfo.controllers;
 
-import com.bharat.AnimeAPI.animeInfoService.models.*;
-import com.bharat.AnimeAPI.animeInfoService.services.AnimeInfoService;
+import com.bharat.AnimeAPI.animeInfo.models.*;
+import com.bharat.AnimeAPI.animeInfo.services.AnimeInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/anime")
-public class AnimeController {
+public class AnimeInfoController {
     @Autowired
     private AnimeInfoService animeInfoService;
 

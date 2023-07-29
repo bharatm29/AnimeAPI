@@ -2,6 +2,10 @@ server:
   port: 4000
 
 spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://bharat:test1234@mongotestserver.02gzgwo.mongodb.net/
+      database: userServiceDB
   datasource:
     url: jdbc:mysql://localhost:3306/java
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -11,5 +15,4 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     generate-ddl: true

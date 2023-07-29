@@ -1,6 +1,6 @@
-package com.bharat.AnimeAPI.animeInfoService.services;
+package com.bharat.AnimeAPI.animeInfo.services;
 
-import com.bharat.AnimeAPI.animeInfoService.models.*;
+import com.bharat.AnimeAPI.animeInfo.models.*;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,7 +66,7 @@ public class AnimeInfoService {
         ).build();
     }
 
-    public AnimeSearch searchFallback(String name, Exception e){
+    public AnimeSearch searchFallback(String name, String page, Exception e){
         return AnimeSearch.builder().animes(List.of(
                 Anime.builder().animeTitle("Could not found").build()
         )).build();
@@ -76,13 +76,13 @@ public class AnimeInfoService {
         return AnimeDetails.builder().animeTitle("Could not found this anime details").build();
     }
 
-    public AnimeTopAiringSearch topAiringFallback(Exception e){
+    public AnimeTopAiringSearch topAiringFallback(String page, Exception e){
         return AnimeTopAiringSearch.builder().animes(
                 List.of(AnimeTopAiring.builder().animeTitle("Could not find any animes").build())
         ).build();
     }
 
-    public AnimeGenresSearch genresSearchFallBack(String genres, Exception e){
+    public AnimeGenresSearch genresSearchFallBack(String genres, String page, Exception e){
         return AnimeGenresSearch.builder().animes(
                 List.of(AnimeGenres.builder().animeTitle("Could not find any anime of this genre").build())
         ).build();

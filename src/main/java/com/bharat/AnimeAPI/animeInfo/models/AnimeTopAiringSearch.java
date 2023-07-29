@@ -1,6 +1,5 @@
-package com.bharat.AnimeAPI.animeInfoService.models;
+package com.bharat.AnimeAPI.animeInfo.models;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

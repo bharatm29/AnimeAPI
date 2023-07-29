@@ -1,16 +1,14 @@
-package com.bharat.AnimeAPI.animeInfoService.models;
+package com.bharat.AnimeAPI.animeInfo.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
-public class AnimeGenresSearch {
-    private List<AnimeGenres> animes;
+@Builder
+public class Anime {
+    private String animeId, animeTitle, animeUrl, animeImg, status;
 }
