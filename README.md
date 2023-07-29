@@ -1,5 +1,5 @@
 # Anime API
-An Anime API for fetching details about an anime and to add it to an account made in Spring Boot.
+An Anime API for fetching details about an anime and to add it to an account. This was made with Spring Boot.
 
 It uses GogoAnime API which is available on [github](https://github.com/riimuru/gogoanime-api).
 
