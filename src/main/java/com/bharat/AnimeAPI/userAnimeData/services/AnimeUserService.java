@@ -2,6 +2,8 @@ package com.bharat.AnimeAPI.userAnimeData.services;
 
 import com.bharat.AnimeAPI.animeInfo.models.AnimeDetails;
 import com.bharat.AnimeAPI.animeInfo.services.AnimeInfoService;
+import com.bharat.AnimeAPI.security.repositories.UserRepository;
+import com.bharat.AnimeAPI.userAnimeData.models.AnimeResponse;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeUser;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeUserResponse;
 import com.bharat.AnimeAPI.userAnimeData.repositories.AnimeUserRepository;
@@ -18,7 +20,14 @@ public class AnimeUserService {
     @Autowired
     private AnimeInfoService animeInfoService;
 
-    public void addUsersAnime(AnimeUser animeUser){
+    @Autowired
+    private UserRepository userRepository;
+
+    public AnimeResponse addAnimeUser(AnimeUser animeUser){
+        if(checkIfEmailDoesNotExists(animeUser.getEmail())){
+            return getAnimeResponse("User is not registered!!");
+        }
+
         AnimeUser saveUser = animeUserRepository.findById(animeUser.getEmail()).orElse(null);
 
         if(saveUser != null){
@@ -27,9 +36,15 @@ public class AnimeUserService {
         }
 
         animeUserRepository.save(animeUser);
+
+        return getAnimeResponse("Added the user");
     }
 
-    public void updateUsersAnime(AnimeUser animeUser){
+    public AnimeResponse updateUsersAnime(AnimeUser animeUser){
+        if(checkIfEmailDoesNotExists(animeUser.getEmail())){
+            return getAnimeResponse("User is not registered!!");
+        }
+
         animeUserRepository.findById(animeUser.getEmail())
             .ifPresent(
                 saveUser -> saveUser.getAnimeIds().forEach(animeId -> {
@@ -42,13 +57,30 @@ public class AnimeUserService {
         ));
 
         animeUserRepository.save(animeUser);
+        return getAnimeResponse("Updated the user");
     }
 
     public AnimeUserResponse getUserAndAnimes(String email){
+        if (checkIfEmailDoesNotExists(email)) {
+            return AnimeUserResponse.builder()
+                    .email("Email not registered!!")
+                    .animes(
+                            List.of(
+                                    AnimeDetails.builder()
+                                            .animeTitle("Not found")
+                                            .build()
+                            )
+                    )
+                    .build();
+        }
+
         AnimeUser animeUser = animeUserRepository.findById(email).orElse(null);
-        if(animeUser == null){
-            return AnimeUserResponse.builder().email("Not found").animes(
-                    List.of(AnimeDetails.builder().animeTitle("Not found").build())
+
+        if(animeUser == null){//in case the user is registered but does not save an account
+            return AnimeUserResponse.builder().email(email).animes(
+                    List.of(AnimeDetails.builder()
+                            .animeTitle("No Animes associated with the account! Consider adding something")
+                            .build())
             ).build();
         }
 
@@ -58,7 +90,23 @@ public class AnimeUserService {
                 .build();
     }
 
-    public void deleteUser(String email){
+    public AnimeResponse deleteUser(String email){
+        if(checkIfEmailDoesNotExists(email)){
+            return getAnimeResponse("User is not registered!!");
+        }
+
         animeUserRepository.deleteById(email);
+
+        return getAnimeResponse("Deleted the user");
+    }
+
+    private static AnimeResponse getAnimeResponse(String message) {
+        return AnimeResponse.builder()
+                .message(message)
+                .build();
+    }
+
+    private boolean checkIfEmailDoesNotExists(String email){
+        return !userRepository.existsById(email);
     }
 }
