@@ -2,17 +2,20 @@ package com.bharat.AnimeAPI.userAnimeData.services;
 
 import com.bharat.AnimeAPI.animeInfo.models.AnimeDetails;
 import com.bharat.AnimeAPI.animeInfo.services.AnimeInfoService;
+import com.bharat.AnimeAPI.exceptions.AnimeUserException;
 import com.bharat.AnimeAPI.security.repositories.UserRepository;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeResponse;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeUser;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeUserResponse;
 import com.bharat.AnimeAPI.userAnimeData.repositories.AnimeUserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AnimeUserService {
     @Autowired
     private AnimeUserRepository animeUserRepository;
@@ -23,16 +26,13 @@ public class AnimeUserService {
     @Autowired
     private UserRepository userRepository;
 
-    public AnimeResponse addAnimeUser(AnimeUser animeUser){
-        if(checkIfEmailDoesNotExists(animeUser.getEmail())){
-            return getAnimeResponse("User is not registered!!");
+    public AnimeResponse addAnimeUser(AnimeUser animeUser) throws AnimeUserException {
+        String userEmail = animeUser.getEmail();
+        if(checkIfEmailDoesNotExists(userEmail)){
+            throw new AnimeUserException("User is not registered!!");
         }
-
-        AnimeUser saveUser = animeUserRepository.findById(animeUser.getEmail()).orElse(null);
-
-        if(saveUser != null){
-            List<String> ids = List.copyOf(saveUser.getAnimeIds());
-            animeUser.getAnimeIds().addAll(ids);
+        if(animeUserRepository.existsById(userEmail)){
+            throw new AnimeUserException("User already initialized");
         }
 
         animeUserRepository.save(animeUser);
@@ -40,9 +40,9 @@ public class AnimeUserService {
         return getAnimeResponse("Added the user");
     }
 
-    public AnimeResponse updateUsersAnime(AnimeUser animeUser){
+    public AnimeResponse updateUsersAnime(AnimeUser animeUser) throws AnimeUserException {
         if(checkIfEmailDoesNotExists(animeUser.getEmail())){
-            return getAnimeResponse("User is not registered!!");
+            throw new AnimeUserException("User is not registered!!");
         }
 
         animeUserRepository.findById(animeUser.getEmail())
@@ -60,23 +60,14 @@ public class AnimeUserService {
         return getAnimeResponse("Updated the user");
     }
 
-    public AnimeUserResponse getUserAndAnimes(String email){
+    public AnimeUserResponse getUserAndAnimes(String email) throws AnimeUserException {
         if (checkIfEmailDoesNotExists(email)) {
-            return AnimeUserResponse.builder()
-                    .email("Email not registered!!")
-                    .animes(
-                            List.of(
-                                    AnimeDetails.builder()
-                                            .animeTitle("Not found")
-                                            .build()
-                            )
-                    )
-                    .build();
+            throw new AnimeUserException("Email not registered!!");
         }
 
         AnimeUser animeUser = animeUserRepository.findById(email).orElse(null);
 
-        if(animeUser == null){//in case the user is registered but does not save an account
+        if(animeUser == null){//in case the user is registered but does not have any animes in their account
             return AnimeUserResponse.builder().email(email).animes(
                     List.of(AnimeDetails.builder()
                             .animeTitle("No Animes associated with the account! Consider adding something")
@@ -90,9 +81,9 @@ public class AnimeUserService {
                 .build();
     }
 
-    public AnimeResponse deleteUser(String email){
+    public AnimeResponse deleteUser(String email) throws AnimeUserException {
         if(checkIfEmailDoesNotExists(email)){
-            return getAnimeResponse("User is not registered!!");
+            throw new AnimeUserException("User is not registered!!");
         }
 
         animeUserRepository.deleteById(email);
@@ -100,13 +91,13 @@ public class AnimeUserService {
         return getAnimeResponse("Deleted the user");
     }
 
-    private static AnimeResponse getAnimeResponse(String message) {
+    private AnimeResponse getAnimeResponse(String message) {
         return AnimeResponse.builder()
                 .message(message)
                 .build();
     }
 
-    private boolean checkIfEmailDoesNotExists(String email){
+    public boolean checkIfEmailDoesNotExists(String email){
         return !userRepository.existsById(email);
     }
 }

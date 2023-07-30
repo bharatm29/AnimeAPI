@@ -1,5 +1,6 @@
 package com.bharat.AnimeAPI.userAnimeData.controller;
 
+import com.bharat.AnimeAPI.exceptions.AnimeUserException;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeUserResponse;
 import com.bharat.AnimeAPI.userAnimeData.services.AnimeUserService;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeResponse;
@@ -13,26 +14,23 @@ public class AnimeUserController {
     @Autowired
     private AnimeUserService animeUserService;
 
+    @GetMapping("/{email}")
+    public @ResponseBody AnimeUserResponse getUser(@PathVariable String email) throws AnimeUserException {
+        return animeUserService.getUserAndAnimes(email);
+    }
 
     @PostMapping("/init")
-    public @ResponseBody AnimeResponse addAnimeUser(@RequestBody AnimeUser animeUser){
+    public @ResponseBody AnimeResponse addAnimeUser(@RequestBody AnimeUser animeUser) throws AnimeUserException {
         return animeUserService.addAnimeUser(animeUser);
     }
 
     @PutMapping("/update")
-    public @ResponseBody AnimeResponse updateAnimeUser(@RequestBody AnimeUser animeUser){
+    public @ResponseBody AnimeResponse updateAnimeUser(@RequestBody AnimeUser animeUser) throws AnimeUserException {
         return animeUserService.updateUsersAnime(animeUser);
     }
 
-    @GetMapping("/{email}")
-    public @ResponseBody AnimeUserResponse getUser(@PathVariable String email){
-        return animeUserService.getUserAndAnimes(email);
-    }
-
     @DeleteMapping("/delete/{email}")
-    public @ResponseBody AnimeResponse deleteUser(@PathVariable String email){
+    public @ResponseBody AnimeResponse deleteUser(@PathVariable String email) throws AnimeUserException {
         return animeUserService.deleteUser(email);
     }
-
-
 }

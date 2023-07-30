@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Anime {
-    private String animeId, animeTitle, animeUrl, animeImg, status;
+    private String animeTitle, animeId, animeUrl, animeImg, status;
 }

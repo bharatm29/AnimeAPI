@@ -22,17 +22,17 @@ resilience4j:
     configs:
       default:
         automaticTransitionFromOpenToHalfOpenEnabled: true
-        slidingWindowSize: 5
+        slidingWindowSize: 10
         slidingWindowType: COUNT_BASED
-        minimumNumberOfCalls: 3
-        maxWaitDurationInHalfOpenState: 3
+        minimumNumberOfCalls: 5
         eventConsumerBufferSize: 10
         waitDurationInOpenState: 3s
         failureRateThreshold: 50
+        permittedNumberOfCallsInHalfOpenState: 3
     instances:
       search-cb:
         baseConfig: default
-        registerHealthIndicator: true
+        registerHealthIndicator: true #we can't put this in the default config :(
       details-cb:
         baseConfig: default
         registerHealthIndicator: true
@@ -53,4 +53,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health, circuitbreakerevents
