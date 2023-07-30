@@ -26,7 +26,7 @@ public class AnimeUserController {
 
     @PutMapping("/update")
     public @ResponseBody AnimeResponse updateAnimeUser(@RequestBody AnimeUser animeUser) throws AnimeUserException {
-        return animeUserService.updateUsersAnime(animeUser);
+        return animeUserService.updateAnimeUsers(animeUser);
     }
 
     @DeleteMapping("/delete/{email}")

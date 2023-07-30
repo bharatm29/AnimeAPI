@@ -40,7 +40,7 @@ public class AnimeUserService {
         return getAnimeResponse("Added the user");
     }
 
-    public AnimeResponse updateUsersAnime(AnimeUser animeUser) throws AnimeUserException {
+    public AnimeResponse updateAnimeUsers(AnimeUser animeUser) throws AnimeUserException {
         if(checkIfEmailDoesNotExists(animeUser.getEmail())){
             throw new AnimeUserException("User is not registered!!");
         }
@@ -62,7 +62,7 @@ public class AnimeUserService {
 
     public AnimeUserResponse getUserAndAnimes(String email) throws AnimeUserException {
         if (checkIfEmailDoesNotExists(email)) {
-            throw new AnimeUserException("Email not registered!!");
+            throw new AnimeUserException("User is not registered!!");
         }
 
         AnimeUser animeUser = animeUserRepository.findById(email).orElse(null);
