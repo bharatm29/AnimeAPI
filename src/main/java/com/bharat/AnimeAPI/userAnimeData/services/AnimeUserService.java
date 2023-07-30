@@ -26,11 +26,9 @@ public class AnimeUserService {
     @Autowired
     private UserRepository userRepository;
 
-    public AnimeResponse addAnimeUser(AnimeUser animeUser) throws AnimeUserException {
+    public AnimeResponse addAnimeUser(AnimeUser animeUser) throws AnimeUserException{
         String userEmail = animeUser.getEmail();
-        if(checkIfEmailDoesNotExists(userEmail)){
-            throw new AnimeUserException("User is not registered!!");
-        }
+        checkIfUserIsRegistered(userEmail);
         if(animeUserRepository.existsById(userEmail)){
             throw new AnimeUserException("User already initialized");
         }
@@ -40,10 +38,10 @@ public class AnimeUserService {
         return getAnimeResponse("Added the user");
     }
 
+
+
     public AnimeResponse updateAnimeUsers(AnimeUser animeUser) throws AnimeUserException {
-        if(checkIfEmailDoesNotExists(animeUser.getEmail())){
-            throw new AnimeUserException("User is not registered!!");
-        }
+        checkIfUserIsRegistered(animeUser.getEmail());
 
         animeUserRepository.findById(animeUser.getEmail())
             .ifPresent(
@@ -61,9 +59,7 @@ public class AnimeUserService {
     }
 
     public AnimeUserResponse getUserAndAnimes(String email) throws AnimeUserException {
-        if (checkIfEmailDoesNotExists(email)) {
-            throw new AnimeUserException("User is not registered!!");
-        }
+        checkIfUserIsRegistered(email);
 
         AnimeUser animeUser = animeUserRepository.findById(email).orElse(null);
 
@@ -82,9 +78,7 @@ public class AnimeUserService {
     }
 
     public AnimeResponse deleteUser(String email) throws AnimeUserException {
-        if(checkIfEmailDoesNotExists(email)){
-            throw new AnimeUserException("User is not registered!!");
-        }
+        checkIfUserIsRegistered(email);
 
         animeUserRepository.deleteById(email);
 
@@ -99,5 +93,11 @@ public class AnimeUserService {
 
     public boolean checkIfEmailDoesNotExists(String email){
         return !userRepository.existsById(email);
+    }
+
+    public void checkIfUserIsRegistered(String userEmail) throws AnimeUserException {
+        if(checkIfEmailDoesNotExists(userEmail)){
+            throw new AnimeUserException("User is not registered!!");
+        }
     }
 }

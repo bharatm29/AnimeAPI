@@ -16,6 +16,7 @@ spring:
     hibernate:
       ddl-auto: update
     generate-ddl: true
+    show-sql: false
 
 resilience4j:
   circuitbreaker:
@@ -63,5 +64,5 @@ springdoc:
     default-models-expand-depth: -1
     disable-swagger-default-url: true
     syntax-highlight:
-      theme: Flattop
+      theme: monokai
       activated: true

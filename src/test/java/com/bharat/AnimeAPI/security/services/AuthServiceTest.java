@@ -1,5 +1,6 @@
 package com.bharat.AnimeAPI.security.services;
 
+import com.bharat.AnimeAPI.exceptions.AnimeUserException;
 import com.bharat.AnimeAPI.exceptions.UserAlreadyExistsException;
 import com.bharat.AnimeAPI.security.models.UserSaveWrapper;
 import com.bharat.AnimeAPI.security.repositories.UserRepository;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -30,7 +32,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("testing registerUser method")
-    void testingRegisterUser() throws UserAlreadyExistsException {
+    void testingRegisterUser() throws UserAlreadyExistsException, AnimeUserException {
         //given
         String userEmail = "user@123";
         UserSaveWrapper user = UserSaveWrapper.builder()
@@ -38,6 +40,7 @@ class AuthServiceTest {
                 .password("password")
                 .email(userEmail)
                 .build();
+        given(userRepository.existsById(anyString())).willReturn(false);
 
         //when
         underTest.registerUser(user);
@@ -72,5 +75,24 @@ class AuthServiceTest {
         )
                 .isInstanceOf(UserAlreadyExistsException.class)
                 .hasMessageContaining(String.format("Email %s is already taken", userEmail));
+    }
+
+    @Test
+    @DisplayName("testing if registerUser throws an AnimeUserException")
+    void registerUserWillThrowAnimeUserException(){
+        //given
+        String userEmail = "user@123";
+        UserSaveWrapper user = UserSaveWrapper.builder()
+                .username("user")
+                .email(userEmail)
+                .build();
+
+        //when
+        //then
+        assertThatThrownBy(
+                () -> underTest.registerUser(user)
+        )
+                .isInstanceOf(AnimeUserException.class)
+                .hasMessageContaining(String.format("Incomplete information, must supply all the three fields"));
     }
 }

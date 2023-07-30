@@ -29,7 +29,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
+    public String getUsername() { //we are doing auth based on email
         return this.email;
     }
 

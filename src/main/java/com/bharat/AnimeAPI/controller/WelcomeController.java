@@ -14,8 +14,6 @@ public class WelcomeController {
 
     @GetMapping("/error")
     public String errorPage(HttpServletRequest request, Model model){
-        model.addAttribute("endpoint", request.getRequestURI());
-        model.addAttribute("message", "hi ?");
         return "error";
     }
 }
