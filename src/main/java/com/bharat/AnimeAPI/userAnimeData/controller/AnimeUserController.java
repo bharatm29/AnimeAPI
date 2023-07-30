@@ -5,6 +5,7 @@ import com.bharat.AnimeAPI.userAnimeData.models.AnimeUserResponse;
 import com.bharat.AnimeAPI.userAnimeData.services.AnimeUserService;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeResponse;
 import com.bharat.AnimeAPI.userAnimeData.models.AnimeUser;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ public class AnimeUserController {
     @Autowired
     private AnimeUserService animeUserService;
 
+    @Operation(summary = "get the user bruh")
     @GetMapping("/{email}")
     public @ResponseBody AnimeUserResponse getUser(@PathVariable String email) throws AnimeUserException {
         return animeUserService.getUserAndAnimes(email);
