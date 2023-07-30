@@ -16,3 +16,41 @@ spring:
     hibernate:
       ddl-auto: update
     generate-ddl: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        slidingWindowSize: 5
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 3
+        maxWaitDurationInHalfOpenState: 3
+        eventConsumerBufferSize: 10
+        waitDurationInOpenState: 3s
+        failureRateThreshold: 50
+    instances:
+      search-cb:
+        baseConfig: default
+        registerHealthIndicator: true
+      details-cb:
+        baseConfig: default
+        registerHealthIndicator: true
+      topAiring-cb:
+        baseConfig: default
+        registerHealthIndicator: true
+      genre-cb:
+        baseConfig: default
+        registerHealthIndicator: true
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"

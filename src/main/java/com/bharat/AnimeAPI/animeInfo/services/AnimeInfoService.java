@@ -68,23 +68,23 @@ public class AnimeInfoService {
 
     public AnimeSearch searchFallback(String name, String page, Exception e){
         return AnimeSearch.builder().animes(List.of(
-                Anime.builder().animeTitle("Could not found").build()
+                Anime.builder().animeTitle("No anime exists with the name or server is down").build()
         )).build();
     }
 
     public AnimeDetails detailsFallBack(String animeId, Exception e){
-        return AnimeDetails.builder().animeTitle("Could not found this anime details").build();
+        return AnimeDetails.builder().animeTitle("Could not found this anime details or server is down").build();
     }
 
     public AnimeTopAiringSearch topAiringFallback(String page, Exception e){
         return AnimeTopAiringSearch.builder().animes(
-                List.of(AnimeTopAiring.builder().animeTitle("Could not find any animes").build())
+                List.of(AnimeTopAiring.builder().animeTitle("Could not find any animes or server is down").build())
         ).build();
     }
 
     public AnimeGenresSearch genresSearchFallBack(String genres, String page, Exception e){
         return AnimeGenresSearch.builder().animes(
-                List.of(AnimeGenres.builder().animeTitle("Could not find any anime of this genre").build())
+                List.of(AnimeGenres.builder().animeTitle("Could not find any anime of this genre or server is down").build())
         ).build();
     }
 }

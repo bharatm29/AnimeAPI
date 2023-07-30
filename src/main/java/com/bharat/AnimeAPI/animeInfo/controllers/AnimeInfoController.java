@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/anime")
-public class AnimeInfoController {
+public class AnimeInfoController{
     @Autowired
     private AnimeInfoService animeInfoService;
 
